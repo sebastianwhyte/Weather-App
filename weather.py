@@ -148,7 +148,7 @@ def display_weather_info(weather_data, imperial = False):
 
 	print(f"({temperature}°{'F' if imperial else 'C'})")
 
-	print(f"Feels like ({feels_like}°{'F' if imperial else 'C'}:{style.PADDING})")
+	print(f"Feels like ({feels_like}°{'F' if imperial else 'C'})")
 
 
 
