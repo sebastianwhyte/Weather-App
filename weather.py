@@ -1,7 +1,8 @@
 from configparser import ConfigParser
-from urllib import parse
+from urllib import parse, error, request
 import argparse
 import json
+import sys
 
 # All api calls will share the same base url / endpoint
 BASE_WEATHER_API_URL =	"http://api.openweathermap.org/data/2.5/weather"
@@ -67,9 +68,50 @@ def build_weather_query(city_input, imperial = False):
 	return url
 
 
+'''
+Makes an API request to the given url and returns the retreived data as a Python object 
+
+Arguments: query_url 	string of formatted url for OpenWeather's city name endpoint
+
+Returns: dict 			weather info for the specified city
+
+'''
+
+def get_weather_data(query_url):
+
+	# Makes http request and saves its response
+	#response = request.urlopen(query_url)
+
+	try: 
+		response = request.urlopen(query_url)
+
+	except error.HTTPError as http_error:
+		if http_error.code == 401:
+			sys.exit("Authorization Failed. Check your API Key.")
+		elif http_error.code == 404:
+			sys.exit("No weather data found for this city")
+		else:
+			sys.exit(f"Error ({http_error.code})")
+
+
+	# Read the retrieved data
+	data = response.read()
+
+
+	try:
+		# Converts json string to a dict 
+		return json.loads(data)
+	except:
+		sys.exit("Failed to read server response")
+
+
 if __name__ == "__main__":
 	user_args = read_user_cli_args()
-	print(user_args.city, user_args.imperial, "\n")
+	#print(user_args.city, user_args.imperial, "\n")
+
 	query_url = build_weather_query(user_args.city, user_args.imperial);
-	print(query_url)
+	#print(query_url)
+
+	weather_data = get_weather_data(query_url)
+	print(weather_data)
 
