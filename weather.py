@@ -19,6 +19,7 @@ CLEAR = range(800, 801)
 CLOUDY = range(801, 900)
 
 
+
 ''' 
 Get the API key from the configuration file
 
@@ -31,6 +32,7 @@ def _get_api_key():
 	config.read("secrets.ini")
 
 	return config["openweather"]["API_KEY"]		# access dictionary value to get the key
+
 
 
 ''' 
@@ -50,6 +52,7 @@ def read_user_cli_args():
 	parser.add_argument("-i", "--imperial", action = "store_true", help = "Display the temperature in imperial units",)
 
 	return parser.parse_args()
+
 
 
 '''
@@ -77,6 +80,7 @@ def build_weather_query(city_input, imperial = False):
 	url = (f"{BASE_WEATHER_API_URL}?q={url_encoded_city_name}"f"&units={units}&appid={API_KEY}")
 
 	return url
+
 
 
 '''
@@ -116,6 +120,7 @@ def get_weather_data(query_url):
 		sys.exit("Failed to read server response")
 
 
+
 '''
 Prints the formmated weather info about a city
 
@@ -150,6 +155,14 @@ def display_weather_info(weather_data, imperial = False):
 
 
 
+'''
+Selects which weather icon and color to display 
+
+Arguments: weather_id 	id from the API response from OpenWeather based on the city name given as input 
+	
+Returns: the symbol and color to display
+
+'''
 
 def select_weather_display(weather_id):
 	
@@ -175,10 +188,8 @@ def select_weather_display(weather_id):
 
 if __name__ == "__main__":
 	user_args = read_user_cli_args()
-	#print(user_args.city, user_args.imperial, "\n")
 
 	query_url = build_weather_query(user_args.city, user_args.imperial);
-	#print(query_url)
 
 	weather_data = get_weather_data(query_url)
 
