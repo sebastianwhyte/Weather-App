@@ -94,9 +94,6 @@ Returns: dict 			weather info for the specified city
 
 def get_weather_data(query_url):
 
-	# Makes http request and saves its response
-	#response = request.urlopen(query_url)
-
 	try: 
 		response = request.urlopen(query_url)
 
